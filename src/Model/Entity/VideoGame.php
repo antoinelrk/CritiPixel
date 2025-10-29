@@ -216,6 +216,37 @@ class VideoGame
     }
 
     /**
+     * Add a tag to the video game.
+     *
+     * @param Tag $tag The tag to add.
+     *
+     * @return VideoGame
+     */
+    public function addTag(Tag $tag): VideoGame
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove a tag from the video game.
+     *
+     * @param Tag $tag The tag to remove.
+     *
+     * @return VideoGame
+     */
+    public function removeTag(Tag $tag): VideoGame
+    {
+        $this->tags->removeElement($tag);
+        return $this;
+    }
+
+    /**
+     * Get the tags associated with the video game.
+     *
      * @return Collection<Tag>
      */
     public function getTags(): Collection
