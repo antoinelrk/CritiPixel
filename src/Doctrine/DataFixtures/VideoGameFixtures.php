@@ -2,6 +2,7 @@
 
 namespace App\Doctrine\DataFixtures;
 
+use App\Model\Entity\Review;
 use App\Model\Entity\Tag;
 use App\Model\Entity\User;
 use App\Model\Entity\VideoGame;
@@ -57,8 +58,9 @@ final class VideoGameFixtures extends Fixture implements DependentFixtureInterfa
 
         $manager->flush();
 
-        // TODO : Ajouter des reviews aux vidéos
+        $this->withRatings($videoGames, $users);
 
+        $manager->flush();
     }
 
     /**
@@ -79,6 +81,31 @@ final class VideoGameFixtures extends Fixture implements DependentFixtureInterfa
 
             foreach ($selectedKeys as $key) {
                 $videoGame->getTags()->add($tags[$key]);
+            }
+        }
+    }
+
+    private function withRatings(array $videoGames, array $users): void
+    {
+        foreach ($videoGames as $gameIndex => $videoGame) {
+            $userGroupIndex = $gameIndex % 5;
+            $selectedUsers = $users[$userGroupIndex];
+
+            foreach ($selectedUsers as $userIndex => $user) {
+                $comment = $this->faker->paragraph();
+
+                $review = new Review();
+                $review->setUser($user);
+                $review->setVideoGame($videoGame);
+                $review->setRating($this->faker->numberBetween(1, 5));
+                $review->setComment($comment);
+
+                $videoGame->getReviews()->add($review);
+
+                $this->manager->persist($review);
+
+                $this->calculateAverageRating->calculateAverage($videoGame);
+                $this->countRatingsPerValue->countRatingsPerValue($videoGame);
             }
         }
     }
