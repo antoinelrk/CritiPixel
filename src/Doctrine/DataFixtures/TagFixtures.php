@@ -6,7 +6,7 @@ use App\Model\Entity\Tag;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class TagFixtures extends Fixture
+final class TagFixtures extends Fixture
 {
     /**
      * Load tag fixtures into the database.
