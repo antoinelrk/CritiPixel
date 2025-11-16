@@ -13,6 +13,7 @@ final class RegisterTest extends FunctionalTestCase
     public function testThatRegistrationShouldSucceeded(): void
     {
         $this->get('/auth/register');
+        self::assertResponseIsSuccessful();
 
         $this->client->submitForm('S\'inscrire', self::getFormData());
 
@@ -34,6 +35,7 @@ final class RegisterTest extends FunctionalTestCase
     public function testThatRegistrationShouldFailed(array $formData): void
     {
         $this->get('/auth/register');
+        self::assertResponseIsSuccessful();
 
         $this->client->submitForm('S\'inscrire', $formData);
 
