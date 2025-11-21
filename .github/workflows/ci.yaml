@@ -43,7 +43,7 @@ jobs:
 
       - name: Start Docker stack
         run: |
-          docker compose -f docker-compose.yml up -d --build
+          docker compose -f compose.yaml up -d --build
 
       - name: Install PHP dependencies
         run: |
