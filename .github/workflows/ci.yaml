@@ -66,4 +66,4 @@ jobs:
 
       - name: Run static analysis
         run: |
-          php vendor/bin/phpstan
+          php -d memory_limit=1G vendor/bin/phpstan

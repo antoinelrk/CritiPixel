@@ -21,15 +21,17 @@ abstract class FunctionalTestCase extends WebTestCase
         $this->client = static::createClient();
     }
 
-    protected function getEntityManager(): EntityManagerInterface
+    protected function getEntityManager(): object
     {
         return $this->service(EntityManagerInterface::class);
     }
 
     /**
      * @template T
+     *
      * @param class-string<T> $id
-     * @return T
+     *
+     * @return object
      */
     protected function service(string $id): object
     {

@@ -7,3 +7,6 @@ create-db:
 test:
 	@composer db-test
 	@vendor/bin/phpunit
+
+stan:
+	@php -d memory_limit=1G vendor/bin/phpstan analyse

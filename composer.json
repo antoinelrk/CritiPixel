@@ -4,7 +4,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.4",
         "doctrine/dbal": "^3",
         "doctrine/doctrine-bundle": "^2.12",
         "doctrine/doctrine-migrations-bundle": "^3.3",
@@ -70,6 +70,8 @@
         "symfony/polyfill-php81": "*"
     },
     "scripts": {
+        "cs:fix": "vendor/bin/php-cs-fixer fix",
+        "cs:check": "vendor/bin/php-cs-fixer fix --dry-run --diff",
         "db": [
             "symfony console doctrine:database:drop -f --if-exists",
             "symfony console doctrine:database:create",
@@ -111,6 +113,13 @@
         "dama/doctrine-test-bundle": "^8.0",
         "doctrine/doctrine-fixtures-bundle": "^3.5",
         "fakerphp/faker": "^1.23",
+        "friendsofphp/php-cs-fixer": "^3.90",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-doctrine": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "phpstan/phpstan-symfony": "^2.0",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "6.4.*",
         "symfony/css-selector": "6.4.*",

@@ -11,8 +11,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 final class RegisterTest extends FunctionalTestCase
 {
     /**
-     * TODO: Add summary of testThatRegistrationShouldSucceeded
-     * @return void
+     * TODO: Add summary of testThatRegistrationShouldSucceeded.
      */
     public function testThatRegistrationShouldSucceeded(): void
     {
@@ -33,8 +32,8 @@ final class RegisterTest extends FunctionalTestCase
     }
 
     /**
-     * TODO: Add summary
-     * 
+     * TODO: Add summary.
+     *
      * @param array<string, string> $formData
      *
      * @dataProvider provideInvalidFormData
@@ -49,8 +48,8 @@ final class RegisterTest extends FunctionalTestCase
     }
 
     /**
-     * TODO: Add summary
-     * 
+     * TODO: Add summary.
+     *
      * @return iterable<array{array<string, string>}>
      */
     public static function provideInvalidFormData(): iterable
@@ -64,8 +63,8 @@ final class RegisterTest extends FunctionalTestCase
     }
 
     /**
-     * TODO: Add summary
-     * 
+     * TODO: Add summary.
+     *
      * @param array<string, string> $overrideData
      *
      * @return array<string, string>
@@ -73,8 +72,8 @@ final class RegisterTest extends FunctionalTestCase
     public static function createFormData(array $overrideData = []): array
     {
         return $overrideData + [
-            'register[username]' => 'username',
-            'register[email]' => 'user@email.com',
+            'register[username]'      => 'username',
+            'register[email]'         => 'user@email.com',
             'register[plainPassword]' => 'SuperPassword123!',
         ];
     }
