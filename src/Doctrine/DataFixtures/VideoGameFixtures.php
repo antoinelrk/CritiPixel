@@ -20,6 +20,14 @@ use function array_fill_callback;
 
 final class VideoGameFixtures extends Fixture implements DependentFixtureInterface
 {
+    /**
+     * Constructor for VideoGameFixtures.
+     *
+     * @param Generator                 $faker                   The Faker generator for generating fake data.
+     * @param CalculateAverageRating    $calculateAverageRating  Service to calculate average ratings for video games.
+     * @param CountRatingsPerValue      $countRatingsPerValue    Service to count ratings per value for video games.
+     * @param EntityManagerInterface    $manager                 The entity manager for database operations.
+     */
     public function __construct(
         private readonly Generator $faker,
         private readonly CalculateAverageRating $calculateAverageRating,
@@ -74,17 +82,24 @@ final class VideoGameFixtures extends Fixture implements DependentFixtureInterfa
     {
         $tags = $this->manager->getRepository(Tag::class)->findAll();
 
-        foreach ($videoGames as $videoGame) {
-            $count = rand(5, count($tags));
+        foreach ($videoGames as $index => $videoGame) {
+            for ($tagIndex = 0; $tagIndex < 5; $tagIndex++) {
+                $tagPosition = ($index + $tagIndex) % count($tags);
+                $tag = $tags[$tagPosition];
 
-            $selectedKeys = (array) array_rand($tags, $count);
-
-            foreach ($selectedKeys as $key) {
-                $videoGame->getTags()->add($tags[$key]);
+                $videoGame->getTags()->add($tag);
             }
         }
     }
 
+    /**
+     * Adds reviews with ratings to each video game from a selection of users.
+     *
+     * @param VideoGame[] $videoGames An array of VideoGame entities to which reviews will be added.
+     * @param User[][]    $users      A two-dimensional array of User entities grouped for review assignment.
+     *
+     * @return void
+     */
     private function withRatings(array $videoGames, array $users): void
     {
         foreach ($videoGames as $gameIndex => $videoGame) {
