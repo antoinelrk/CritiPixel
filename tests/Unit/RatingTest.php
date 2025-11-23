@@ -10,7 +10,7 @@ use App\Rating\RatingHandler;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class RatingTest
+ * Class RatingTest.
  *
  * Unit tests for the {@see RatingHandler} component.
  *
@@ -25,8 +25,6 @@ final class RatingTest extends TestCase
 {
     /**
      * The instance of the class under test.
-     *
-     * @var RatingHandler
      */
     private RatingHandler $handler;
 
@@ -35,8 +33,6 @@ final class RatingTest extends TestCase
      *
      * This method instantiates a fresh {@see RatingHandler}
      * for isolation between tests.
-     *
-     * @return void
      */
     protected function setUp(): void
     {
@@ -55,10 +51,8 @@ final class RatingTest extends TestCase
      *
      * @dataProvider videoGamesProvider
      *
-     * @param VideoGame $videoGame        The video game to test.
-     * @param int|null  $expectedAverage  The expected average rating value.
-     *
-     * @return void
+     * @param VideoGame $videoGame        the video game to test
+     * @param int|null  $expectedAverage  the expected average rating value
      */
     public function testShouldCalculateAverageRating(VideoGame $videoGame, ?int $expectedAverage): void
     {
@@ -106,7 +100,7 @@ final class RatingTest extends TestCase
      *
      * @param int ...$ratings  The rating values to assign to each review.
      *
-     * @return VideoGame  The populated video game entity.
+     * @return VideoGame  the populated video game entity
      */
     private static function makeVideoGameWithRatings(int ...$ratings): VideoGame
     {
@@ -127,13 +121,11 @@ final class RatingTest extends TestCase
      * Example:
      * - Reviews with ratings 4 and 5 produce an average of 4.5
      * - The expected rounded result is 5
-     *
-     * @return void
      */
-    public function test_calculateAverage_rounds_decimal_average(): void
+    public function testCalculateAverageRoundsDecimalAverage(): void
     {
         // Arrange
-        $videoGame = self::makeVideoGameWithRatings(4, 5);
+        $videoGame     = self::makeVideoGameWithRatings(4, 5);
         $this->handler = new RatingHandler();
 
         // Act

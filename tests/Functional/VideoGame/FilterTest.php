@@ -164,8 +164,9 @@ final class FilterTest extends FunctionalTestCase
 
     /**
      * @param array<string, mixed> $query
-     * @param string[] $expectedPaginationLinks
-     * @param string[] $expectedVideoGames
+     * @param string[]             $expectedPaginationLinks
+     * @param string[]             $expectedVideoGames
+     *
      * @dataProvider provideUseCases
      */
     public function testShouldShowVideoGamesByUseCase(
@@ -176,14 +177,14 @@ final class FilterTest extends FunctionalTestCase
         int $expectedTotal,
         ?int $expectedPage,
         array $expectedPaginationLinks,
-        array $expectedVideoGames
+        array $expectedVideoGames,
     ): void {
         $this->get('/', $query);
         self::assertResponseIsSuccessful();
         self::assertSelectorCount($expectedCount, 'article.game-card');
         self::assertSelectorTextSame(
             'div.list-info',
-            sprintf(
+            \sprintf(
                 'Affiche %d jeux vidéo de %d à %d sur les %d jeux vidéo',
                 $expectedCount,
                 $expectedOffsetFrom,
@@ -191,23 +192,26 @@ final class FilterTest extends FunctionalTestCase
                 $expectedTotal
             )
         );
-        if ($expectedPage === null) {
+        if (null === $expectedPage) {
             self::assertSelectorNotExists('nav[aria-label="Pagination"]');
         } else {
             self::assertSelectorTextSame('li.page-item.active', (string) $expectedPage);
-            self::assertSelectorCount(count($expectedPaginationLinks), 'li.page-item');
+            self::assertSelectorCount(\count($expectedPaginationLinks), 'li.page-item');
             foreach ($expectedPaginationLinks as $expectedPaginationLink) {
-                self::assertSelectorExists(sprintf('li.page-item[aria-label="%s"]', $expectedPaginationLink));
+                self::assertSelectorExists(\sprintf('li.page-item[aria-label="%s"]', $expectedPaginationLink));
             }
         }
         foreach (array_values($expectedVideoGames) as $index => $expectedVideoGame) {
             self::assertSelectorTextSame(
-                sprintf('article.game-card:nth-child(%d) h2.game-card-title a', $index + 1),
+                \sprintf('article.game-card:nth-child(%d) h2.game-card-title a', $index + 1),
                 $expectedVideoGame
             );
         }
     }
 
+    /**
+     * Test sorting video games.
+     */
     public function testShouldSortVideoGames(): void
     {
         $this->get('/');
@@ -222,7 +226,7 @@ final class FilterTest extends FunctionalTestCase
             'Jeu vidéo 9'
         );
 
-        $this->submit('Trier', ['limit' => 25,'sorting' => 'Title', 'direction' => 'Ascending'], 'GET');
+        $this->submit('Trier', ['limit' => 25, 'sorting' => 'Title', 'direction' => 'Ascending'], 'GET');
         self::assertResponseIsSuccessful();
         self::assertSelectorCount(25, 'article.game-card');
         self::assertSelectorTextSame(
@@ -235,6 +239,9 @@ final class FilterTest extends FunctionalTestCase
         );
     }
 
+    /**
+     * Test filtering by multiple tags.
+     */
     public function testShouldFilterBySearchVideoGames(): void
     {
         $this->get('/');
@@ -258,6 +265,9 @@ final class FilterTest extends FunctionalTestCase
         );
     }
 
+    /**
+     * Test filtering by multiple tags.
+     */
     public function testShouldFilterByTagsVideoGames(): void
     {
         $this->get('/');
@@ -297,13 +307,9 @@ final class FilterTest extends FunctionalTestCase
 
     /**
      * @param array<string, mixed> $query
-     * @param int $expectedCount
-     * @param int $expectedOffsetFrom
-     * @param int $expectedOffsetTo
-     * @param int $expectedTotal
-     * @param ?int $expectedPage
-     * @param null|string[] $expectedPaginationLinks
-     * @param null|string[] $expectedVideoGames
+     * @param string[]|null        $expectedPaginationLinks
+     * @param string[]|null        $expectedVideoGames
+     *
      * @return array{
      *     query: array<string, mixed>,
      *     expectedCount: int,
@@ -312,7 +318,7 @@ final class FilterTest extends FunctionalTestCase
      *     expectedTotal: int,
      *     expectedPage: int|null,
      *     expectedPaginationLinks: string[],
-     *     expectedVideoGames: string[]
+     *     expectedVideoGames: string[]|mixed
      * }
      */
     private static function createUseCase(
@@ -323,9 +329,9 @@ final class FilterTest extends FunctionalTestCase
         int $expectedTotal = 50,
         ?int $expectedPage = 1,
         ?array $expectedPaginationLinks = null,
-        ?array $expectedVideoGames = null
+        ?array $expectedVideoGames = [],
     ): array {
-        if ($expectedPage !== null) {
+        if (null !== $expectedPage) {
             $expectedPaginationLinks = $expectedPaginationLinks ?? [
                 '1',
                 '2',
@@ -351,13 +357,14 @@ final class FilterTest extends FunctionalTestCase
             'expectedPage' => $expectedPage,
             'expectedPaginationLinks' => $expectedPaginationLinks ?? [],
             'expectedVideoGames' => $expectedVideoGames ?? array_fill_callback(
-                    $expectedOffsetFrom - 1,
-                    $expectedCount,
-                    static fn (int $index) => sprintf(
-                        'Jeu vidéo %d',
-                        $index
-                    )
+                $expectedOffsetFrom - 1,
+                $expectedCount,
+                /* @phpstan-ignore-next-line */
+                static fn (int $index) => sprintf(
+                    'Jeu vidéo %d',
+                    $index
                 )
+            ),
         ];
     }
 }

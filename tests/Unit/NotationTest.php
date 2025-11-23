@@ -11,7 +11,7 @@ use App\Rating\RatingHandler;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class NotationTest
+ * Class NotationTest.
  *
  * Unit tests for the {@see RatingHandler::countRatingsPerValue()} method.
  *
@@ -24,8 +24,6 @@ final class NotationTest extends TestCase
 {
     /**
      * The instance of the class under test.
-     *
-     * @var RatingHandler
      */
     private RatingHandler $handler;
 
@@ -34,8 +32,6 @@ final class NotationTest extends TestCase
      *
      * This method initializes a new {@see RatingHandler} instance
      * to ensure test isolation.
-     *
-     * @return void
      */
     protected function setUp(): void
     {
@@ -56,14 +52,12 @@ final class NotationTest extends TestCase
      *
      * @dataProvider videoGamesProvider
      *
-     * @param VideoGame              $videoGame      The video game being tested.
-     * @param NumberOfRatingPerValue $expectedCounts The expected count object after computation.
-     *
-     * @return void
+     * @param VideoGame              $videoGame      the video game being tested
+     * @param NumberOfRatingPerValue $expectedCounts the expected count object after computation
      */
-    public function test_countRatingsPerValue_updates_expected_counts(
+    public function testCountRatingsPerValueUpdatesExpectedCounts(
         VideoGame $videoGame,
-        NumberOfRatingPerValue $expectedCounts
+        NumberOfRatingPerValue $expectedCounts,
     ): void {
         // Act
         $this->handler->countRatingsPerValue($videoGame);
@@ -104,7 +98,7 @@ final class NotationTest extends TestCase
      *
      * @param int ...$ratings  The rating values to assign to each review (1–5).
      *
-     * @return VideoGame  The constructed video game entity.
+     * @return VideoGame  the constructed video game entity
      */
     private static function makeVideoGameWithRatings(int ...$ratings): VideoGame
     {
@@ -125,20 +119,20 @@ final class NotationTest extends TestCase
      * Each count is applied by invoking the appropriate increment method
      * (`increaseOne`, `increaseTwo`, etc.), mimicking real behavior.
      *
-     * @param int $one   The number of "1-star" ratings.
-     * @param int $two   The number of "2-star" ratings.
-     * @param int $three The number of "3-star" ratings.
-     * @param int $four  The number of "4-star" ratings.
-     * @param int $five  The number of "5-star" ratings.
+     * @param int $one   the number of "1-star" ratings
+     * @param int $two   the number of "2-star" ratings
+     * @param int $three the number of "3-star" ratings
+     * @param int $four  the number of "4-star" ratings
+     * @param int $five  the number of "5-star" ratings
      *
-     * @return NumberOfRatingPerValue  The expected counter state.
+     * @return NumberOfRatingPerValue  the expected counter state
      */
     private static function makeExpectedCounts(
         int $one = 0,
         int $two = 0,
         int $three = 0,
         int $four = 0,
-        int $five = 0
+        int $five = 0,
     ): NumberOfRatingPerValue {
         $counts = new NumberOfRatingPerValue();
 
