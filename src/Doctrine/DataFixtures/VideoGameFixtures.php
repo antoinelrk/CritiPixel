@@ -19,10 +19,10 @@ final class VideoGameFixtures extends Fixture implements DependentFixtureInterfa
     /**
      * Constructor for VideoGameFixtures.
      *
-     * @param Generator                 $faker                   the Faker generator for generating fake data
-     * @param CalculateAverageRating    $calculateAverageRating  service to calculate average ratings for video games
-     * @param CountRatingsPerValue      $countRatingsPerValue    service to count ratings per value for video games
-     * @param EntityManagerInterface    $manager                 the entity manager for database operations
+     * @param Generator              $faker                  the Faker generator for generating fake data
+     * @param CalculateAverageRating $calculateAverageRating service to calculate average ratings for video games
+     * @param CountRatingsPerValue   $countRatingsPerValue   service to count ratings per value for video games
+     * @param EntityManagerInterface $manager                the entity manager for database operations
      */
     public function __construct(
         private readonly Generator $faker,
@@ -43,7 +43,7 @@ final class VideoGameFixtures extends Fixture implements DependentFixtureInterfa
     {
         $users = $this->manager->getRepository(User::class)->findAll();
 
-        $videoGames = array_fill_callback(0, 50, fn (int $index): VideoGame => (new VideoGame())
+        $videoGames = array_fill_callback(0, 50, fn (int $index): VideoGame => new VideoGame()
             ->setTitle(\sprintf('Jeu vidéo %d', $index))
             ->setDescription($this->faker->paragraphs(10, true))
             ->setReleaseDate(new \DateTimeImmutable())
@@ -66,7 +66,7 @@ final class VideoGameFixtures extends Fixture implements DependentFixtureInterfa
     }
 
     /**
-     * Adds random tags to each video game from the available tags in the database.
+     * Attaches tags to each video game from the available tags in the database.
      *
      * @param VideoGame[] $videoGames an array of VideoGame entities to which tags will be added
      */
@@ -77,7 +77,7 @@ final class VideoGameFixtures extends Fixture implements DependentFixtureInterfa
         foreach ($videoGames as $index => $videoGame) {
             for ($tagIndex = 0; $tagIndex < 5; ++$tagIndex) {
                 $tagPosition = ($index + $tagIndex) % \count($tags);
-                $tag         = $tags[$tagPosition];
+                $tag = $tags[$tagPosition];
 
                 $videoGame->getTags()->add($tag);
             }
@@ -94,7 +94,7 @@ final class VideoGameFixtures extends Fixture implements DependentFixtureInterfa
     {
         foreach ($videoGames as $gameIndex => $videoGame) {
             $userGroupIndex = $gameIndex % 5;
-            $selectedUsers  = $users[$userGroupIndex];
+            $selectedUsers = $users[$userGroupIndex];
 
             foreach ($selectedUsers as $userIndex => $user) {
                 $comment = $this->faker->paragraph();
