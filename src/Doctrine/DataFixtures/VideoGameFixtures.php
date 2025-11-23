@@ -88,30 +88,34 @@ final class VideoGameFixtures extends Fixture implements DependentFixtureInterfa
      * Adds reviews with ratings to each video game from a selection of users.
      *
      * @param VideoGame[] $videoGames an array of VideoGame entities to which reviews will be added
-     * @param User[][]    $users      a two-dimensional array of User entities grouped for review assignment
+     * @param User[]      $users      a two-dimensional array of User entities grouped for review assignment
      */
     private function withRatings(array $videoGames, array $users): void
     {
+        $userCount = count($users);
+        if (0 === $userCount) {
+            return;
+        }
+
         foreach ($videoGames as $gameIndex => $videoGame) {
-            $userGroupIndex = $gameIndex % 5;
-            $selectedUsers = $users[$userGroupIndex];
+            // un user par jeu (ou modulo)
+            $userIndex = $gameIndex % $userCount;
+            $user = $users[$userIndex];
 
-            foreach ($selectedUsers as $userIndex => $user) {
-                $comment = $this->faker->paragraph();
+            $comment = $this->faker->paragraph();
 
-                $review = new Review();
-                $review->setUser($user);
-                $review->setVideoGame($videoGame);
-                $review->setRating($this->faker->numberBetween(1, 5));
-                $review->setComment($comment);
+            $review = new Review();
+            $review->setUser($user);
+            $review->setVideoGame($videoGame);
+            $review->setRating($this->faker->numberBetween(1, 5));
+            $review->setComment($comment);
 
-                $videoGame->getReviews()->add($review);
+            $videoGame->getReviews()->add($review);
 
-                $this->manager->persist($review);
+            $this->manager->persist($review);
 
-                $this->calculateAverageRating->calculateAverage($videoGame);
-                $this->countRatingsPerValue->countRatingsPerValue($videoGame);
-            }
+            $this->calculateAverageRating->calculateAverage($videoGame);
+            $this->countRatingsPerValue->countRatingsPerValue($videoGame);
         }
     }
 
