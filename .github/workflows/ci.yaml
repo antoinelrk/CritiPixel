@@ -1,0 +1,69 @@
+name: CI - Release Next
+
+on:
+  push:
+    branches:
+      - release/next
+
+jobs:
+  test-suite:
+    name: Test suite (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: [ubuntu-latest]
+        php: ['8.4']
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, xml, ctype, iconv, intl
+          tools: castor
+
+      - name: Detect Composer cache directory
+        id: composer-cache-dir
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache-dir.outputs.dir }}
+          key: composer-${{ runner.os }}-php-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            composer-${{ runner.os }}-php-${{ matrix.php }}-
+            composer-${{ runner.os }}-
+
+      - name: Start Docker stack
+        run: |
+          docker compose -f compose.yaml up -d --build
+
+      - name: Install PHP dependencies
+        run: |
+          composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Prepare test database
+        run: |
+          php bin/console doctrine:database:drop -f --if-exists --env=test
+          php bin/console doctrine:database:create --env=test
+          php bin/console doctrine:migrations:migrate -n --env=test
+          php bin/console doctrine:fixtures:load -n --purge-with-truncate --env=test
+
+      - name: Build frontend assets
+        run: |
+          php bin/console sass:build
+
+      - name: Run PHPUnit tests
+        run: |
+          php bin/phpunit
+
+      - name: Run static analysis
+        run: |
+          php vendor/bin/phpstan

@@ -20,3 +20,9 @@ php.local.ini
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+.idea/
+.vscode/
+.DS_Store
+/node_modules/
+/build/
