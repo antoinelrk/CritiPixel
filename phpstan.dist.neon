@@ -1,0 +1,18 @@
+includes:
+    - phpstan-tests.neon
+
+parameters:
+    level: 5
+
+    paths:
+        - src
+        - tests
+    reportUnmatchedIgnoredErrors: false
+
+    ignoreErrors:
+        -
+            identifier: property.onlyWritten
+        -
+            identifier: property.unusedType
+        -
+            identifier: property.onlyRead

@@ -11,15 +11,13 @@ final class TagFixtures extends Fixture
     /**
      * Load tag fixtures into the database.
      *
-     * @param ObjectManager $manager The object manager to persist entities.
-     *
-     * @return void
+     * @param ObjectManager $manager the object manager to persist entities
      */
     public function load(ObjectManager $manager): void
     {
-        for ($i = 1; $i <= 20; $i++) {
+        for ($i = 1; $i <= 25; ++$i) {
             $tag = new Tag();
-            $tag->setName(sprintf('Tag %d', $i));
+            $tag->setName(\sprintf('Tag %d', $i));
             $manager->persist($tag);
         }
 

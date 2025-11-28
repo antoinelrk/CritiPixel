@@ -17,7 +17,7 @@ final class ShowTest extends FunctionalTestCase
     /**
      * Ensures a game page is reachable and displays the expected title.
      */
-    public function test_show_displays_title_for_existing_game(): void
+    public function testShowDisplaysTitleForExistingGame(): void
     {
         // Arrange
         $slug = '/jeu-video-0';
@@ -39,7 +39,7 @@ final class ShowTest extends FunctionalTestCase
      *  - expect a redirect
      *  - follow it and assert the last review contains our values
      */
-    public function test_post_review_persists_and_displays_latest_review(): void
+    public function testPostReviewPersistsAndDisplaysLatestReview(): void
     {
         // Arrange
         $slug       = '/jeu-video-49';
